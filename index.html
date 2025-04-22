@@ -12,13 +12,9 @@
   <style>
     body {
       font-family: 'Space Mono', monospace;
-      background-color: black; /* Fallback */
+      background-color: black; /* Solid black background */
     }
     .content-wrapper {
-      background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.8)), url('background.jpg');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
       min-height: 100vh;
     }
     h1, h2, p, blockquote {
@@ -32,8 +28,7 @@
       align-items: center;
     }
     .audio-player audio {
-      width: 100%;
-      display: block; /* Make audio controls visible */
+      display: none; /* Hide the audio controls */
     }
     .play-button {
       margin-top: 1rem;
@@ -45,9 +40,20 @@
       font-weight: bold;
       cursor: pointer;
       transition: background-color 0.3s;
+      box-shadow: 0 0 10px rgba(255, 69, 69, 0.5);
+      border: 2px solid rgba(255, 255, 255, 0.2);
     }
     .play-button:hover {
       background-color: #FF2525;
+    }
+    .raw-image-container {
+      margin-top: 4rem;
+      width: 100%;
+      text-align: center;
+    }
+    .raw-image-container img {
+      max-width: 100%;
+      height: auto;
     }
   </style>
 </head>
@@ -59,7 +65,7 @@
       <blockquote class="italic text-gray-400">"If you're still coding, you already lost." – Everyone in the future</blockquote>
       
       <div class="audio-player">
-        <audio id="manifesto-audio" controls preload="auto">
+        <audio id="manifesto-audio" preload="auto">
           <source src="manifesto.mp3" type="audio/mpeg">
           Your browser does not support the audio element.
         </audio>
@@ -136,6 +142,11 @@
     <footer class="text-center text-gray-500 text-sm pt-12 border-t border-gray-700">
       <p>🪦 DEV IS DEAD. And if that offends you — good. You're already in the rearview.</p>
     </footer>
+  </div>
+  
+  <!-- Raw image at the bottom -->
+  <div class="raw-image-container">
+    <img src="background.jpg" alt="Manifesto Background Image">
   </div>
 
   <script>
