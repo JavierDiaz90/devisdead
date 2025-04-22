@@ -1,159 +1,81 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2575.4">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.5px Menlo; color: #9ba2b1; -webkit-text-stroke: #9ba2b1; background-color: #242423}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.5px Menlo; color: #d65562; -webkit-text-stroke: #d65562; background-color: #242423}
-    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.5px Menlo; color: #88b966; -webkit-text-stroke: #88b966; background-color: #242423}
-    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.5px Menlo; color: #4a505d; -webkit-text-stroke: #4a505d; background-color: #242423}
-    p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.5px Menlo; color: #9ba2b1; -webkit-text-stroke: #9ba2b1; background-color: #242423; min-height: 12.0px}
-    p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.5px Menlo; color: #519deb; -webkit-text-stroke: #519deb; background-color: #242423}
-    p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.5px Menlo; color: #d65562; -webkit-text-stroke: #d65562}
-    p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px 'Helvetica Neue'; color: #f9f8f2; -webkit-text-stroke: #f9f8f2; min-height: 15.0px}
-    span.s1 {font-kerning: none; text-shadow: 0.0px 1.0px 0.0px rgba(255, 255, 255, 0)}
-    span.s2 {font-kerning: none; color: #d65562; -webkit-text-stroke: 0px #d65562; text-shadow: 0.0px 1.0px 0.0px rgba(255, 255, 255, 0)}
-    span.s3 {font-kerning: none; color: #c58853; -webkit-text-stroke: 0px #c58853; text-shadow: 0.0px 1.0px 0.0px rgba(255, 255, 255, 0)}
-    span.s4 {font-kerning: none; color: #88b966; -webkit-text-stroke: 0px #88b966; text-shadow: 0.0px 1.0px 0.0px rgba(255, 255, 255, 0)}
-    span.s5 {font-kerning: none; color: #9ba2b1; -webkit-text-stroke: 0px #9ba2b1; text-shadow: 0.0px 1.0px 0.0px rgba(255, 255, 255, 0)}
-    span.s6 {font-kerning: none; color: #b85dd5; -webkit-text-stroke: 0px #b85dd5; text-shadow: 0.0px 1.0px 0.0px rgba(255, 255, 255, 0)}
-    span.s7 {font-kerning: none; color: #519deb; -webkit-text-stroke: 0px #519deb; text-shadow: 0.0px 1.0px 0.0px rgba(255, 255, 255, 0)}
-    span.s8 {font-kerning: none; color: #9ba2b1; background-color: #242423; -webkit-text-stroke: 0px #9ba2b1; text-shadow: 0.0px 1.0px 0.0px rgba(255, 255, 255, 0)}
-    span.s9 {font-kerning: none; background-color: #242423; text-shadow: 0.0px 1.0px 0.0px rgba(255, 255, 255, 0)}
-    span.s10 {font-kerning: none}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DEV IS DEAD - A Manifesto</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Monospace font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap">
+  <style>
+    body {
+      font-family: 'Space Mono', monospace;
+      background-image: url('background.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-color: black; /* Fallback */
+    }
+    .content-wrapper {
+      background-color: rgba(0, 0, 0, 0.85); /* Semi-transparent overlay */
+      min-height: 100vh;
+    }
+    .audio-player {
+      margin: 2rem auto;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .audio-player audio {
+      width: 100%;
+    }
+    .play-button {
+      margin-top: 1rem;
+      padding: 0.75rem 2rem;
+      background-color: #FF4545;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .play-button:hover {
+      background-color: #FF2525;
+    }
   </style>
 </head>
 <body>
-<p class="p1"><span class="s1">&lt;!DOCTYPE html&gt;</span></p>
-<p class="p1"><span class="s1">&lt;</span><span class="s2">html </span><span class="s3">lang</span><span class="s1">="</span><span class="s4">en</span><span class="s1">"&gt;</span></p>
-<p class="p2"><span class="s5">&lt;</span><span class="s1">head</span><span class="s5">&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;</span><span class="s2">meta </span><span class="s3">charset</span><span class="s1">="</span><span class="s4">UTF-8</span><span class="s1">"&gt;</span></p>
-<p class="p3"><span class="s5"><span class="Apple-converted-space">  </span>&lt;</span><span class="s2">meta </span><span class="s3">name</span><span class="s5">="</span><span class="s1">viewport</span><span class="s5">"</span><span class="s2"> </span><span class="s3">content</span><span class="s5">="</span><span class="s1">width=device-width, initial-scale=1.0</span><span class="s5">"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;</span><span class="s2">title</span><span class="s1">&gt;DEV IS DEAD - A Manifesto&lt;/</span><span class="s2">title</span><span class="s1">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">  </span></span><span class="s1"><i>&lt;!-- Tailwind CSS via CDN --&gt;</i><i></i></span></p>
-<p class="p3"><span class="s5"><span class="Apple-converted-space">  </span>&lt;</span><span class="s2">script </span><span class="s3">src</span><span class="s5">="</span><span class="s1">https://cdn.tailwindcss.com</span><span class="s5">"&gt;&lt;/</span><span class="s2">script</span><span class="s5">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">  </span></span><span class="s1"><i>&lt;!-- Monospace font --&gt;</i><i></i></span></p>
-<p class="p3"><span class="s5"><span class="Apple-converted-space">  </span>&lt;</span><span class="s2">link </span><span class="s3">rel</span><span class="s5">="</span><span class="s1">stylesheet</span><span class="s5">"</span><span class="s2"> </span><span class="s3">href</span><span class="s5">="</span><span class="s1">https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;display=swap</span><span class="s5">"&gt;</span></p>
-<p class="p2"><span class="s5"><span class="Apple-converted-space">  </span>&lt;</span><span class="s1">style</span><span class="s5">&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span></span><span class="s4">body</span><span class="s1"> {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span></span><span class="s2">font-family</span><span class="s1">: </span><span class="s4">'Space Mono'</span><span class="s1">, monospace;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p3"><span class="s5"><span class="Apple-converted-space">    </span></span><span class="s1">.audio-player</span><span class="s5"> {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span></span><span class="s2">margin</span><span class="s1">: </span><span class="s3">2</span><span class="s1">rem auto;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span></span><span class="s2">max-width</span><span class="s1">: </span><span class="s3">400</span><span class="s1">px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span></span><span class="s2">display</span><span class="s1">: flex;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span></span><span class="s2">flex-direction</span><span class="s1">: column;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span></span><span class="s2">align-items</span><span class="s1">: center;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p3"><span class="s5"><span class="Apple-converted-space">    </span></span><span class="s1">.audio-player audio</span><span class="s5"> {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span></span><span class="s2">width</span><span class="s1">: </span><span class="s3">100</span><span class="s1">%;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p3"><span class="s5"><span class="Apple-converted-space">    </span></span><span class="s1">.play-button</span><span class="s5"> {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span></span><span class="s2">margin-top</span><span class="s1">: </span><span class="s3">1</span><span class="s1">rem;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span></span><span class="s2">padding</span><span class="s1">: </span><span class="s3">0.75</span><span class="s1">rem </span><span class="s3">2</span><span class="s1">rem;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span></span><span class="s2">background-color</span><span class="s1">: #FF4545;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span></span><span class="s2">color</span><span class="s1">: white;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span></span><span class="s2">border</span><span class="s1">: none;</span></p>
-<p class="p2"><span class="s5"><span class="Apple-converted-space">      </span></span><span class="s1">border-radius</span><span class="s5">: </span><span class="s3">4</span><span class="s5">px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span></span><span class="s2">font-weight</span><span class="s1">: bold;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span></span><span class="s2">cursor</span><span class="s1">: pointer;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span></span><span class="s2">transition</span><span class="s1">: background-color </span><span class="s3">0.3</span><span class="s1">s;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p3"><span class="s5"><span class="Apple-converted-space">    </span></span><span class="s1">.play-button:hover</span><span class="s5"> {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span></span><span class="s2">background-color</span><span class="s1">: #FF2525;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/</span><span class="s2">style</span><span class="s1">&gt;</span></p>
-<p class="p2"><span class="s5">&lt;/</span><span class="s1">head</span><span class="s5">&gt;</span></p>
-<p class="p3"><span class="s5">&lt;</span><span class="s2">body </span><span class="s3">class</span><span class="s5">="</span><span class="s1">bg-black text-white min-h-screen font-mono p-6 space-y-16</span><span class="s5">"&gt;</span></p>
-<p class="p3"><span class="s5"><span class="Apple-converted-space">  </span>&lt;</span><span class="s2">section </span><span class="s3">class</span><span class="s5">="</span><span class="s1">text-center space-y-4</span><span class="s5">"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;</span><span class="s2">h1 </span><span class="s3">class</span><span class="s1">="</span><span class="s4">text-5xl font-bold</span><span class="s1">"&gt;🪦 DEV IS DEAD&lt;/</span><span class="s2">h1</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;</span><span class="s2">p </span><span class="s3">class</span><span class="s1">="</span><span class="s4">text-xl</span><span class="s1">"&gt;A Manifesto for the End of Everything&lt;/</span><span class="s2">p</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;</span><span class="s2">blockquote </span><span class="s3">class</span><span class="s1">="</span><span class="s4">italic text-gray-400</span><span class="s1">"&gt;"If you're still coding, you already lost." – Everyone in the future&lt;/</span><span class="s2">blockquote</span><span class="s1">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span></span></p>
-<p class="p3"><span class="s5"><span class="Apple-converted-space">    </span>&lt;</span><span class="s2">div </span><span class="s3">class</span><span class="s5">="</span><span class="s1">audio-player</span><span class="s5">"&gt;</span></p>
-<p class="p3"><span class="s5"><span class="Apple-converted-space">      </span>&lt;</span><span class="s2">audio </span><span class="s3">id</span><span class="s5">="</span><span class="s1">manifesto-audio</span><span class="s5">"</span><span class="s2"> </span><span class="s3">preload</span><span class="s5">="</span><span class="s1">auto</span><span class="s5">"&gt;</span></p>
-<p class="p3"><span class="s5"><span class="Apple-converted-space">        </span>&lt;</span><span class="s2">source </span><span class="s3">src</span><span class="s5">="</span><span class="s1">manifesto.mp3</span><span class="s5">"</span><span class="s2"> </span><span class="s3">type</span><span class="s5">="</span><span class="s1">audio/mpeg</span><span class="s5">"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>Your browser does not support the audio element.</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;/</span><span class="s2">audio</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;</span><span class="s2">button </span><span class="s3">class</span><span class="s1">="</span><span class="s4">play-button</span><span class="s1">"</span><span class="s2"> </span><span class="s3">onclick</span><span class="s1">="</span><span class="s4">toggleAudio()</span><span class="s1">"&gt;▶️ LISTEN TO MANIFESTO&lt;/</span><span class="s2">button</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/</span><span class="s2">div</span><span class="s1">&gt;</span></p>
-<p class="p2"><span class="s5"><span class="Apple-converted-space">  </span>&lt;/</span><span class="s1">section</span><span class="s5">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">  </span></span></p>
-<p class="p3"><span class="s5"><span class="Apple-converted-space">  </span>&lt;</span><span class="s2">section </span><span class="s3">class</span><span class="s5">="</span><span class="s1">max-w-3xl mx-auto space-y-6</span><span class="s5">"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;</span><span class="s2">h2 </span><span class="s3">class</span><span class="s1">="</span><span class="s4">text-3xl font-bold</span><span class="s1">"&gt;🪚 DEVS ARE DEAD&lt;/</span><span class="s2">h2</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;</span><span class="s2">p</span><span class="s1">&gt;You spent 6 years learning syntax. LLMs learned it in 6 minutes. You're not special. You're a keyboard middleman.&lt;/</span><span class="s2">p</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;</span><span class="s2">p</span><span class="s1">&gt;Abstraction killed the full-stack dev. LLMs killed the rest. You're not building — you're babysitting YAML files.&lt;/</span><span class="s2">p</span><span class="s1">&gt;</span></p>
-<p class="p2"><span class="s5"><span class="Apple-converted-space">  </span>&lt;/</span><span class="s1">section</span><span class="s5">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">  </span></span></p>
-<p class="p3"><span class="s5"><span class="Apple-converted-space">  </span>&lt;</span><span class="s2">section </span><span class="s3">class</span><span class="s5">="</span><span class="s1">max-w-3xl mx-auto space-y-6</span><span class="s5">"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;</span><span class="s2">h2 </span><span class="s3">class</span><span class="s1">="</span><span class="s4">text-3xl font-bold</span><span class="s1">"&gt;⚰️ CRYPTO IS DEAD&lt;/</span><span class="s2">h2</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;</span><span class="s2">p</span><span class="s1">&gt;It's not decentralized. It's not fair. It's not about freedom.&lt;/</span><span class="s2">p</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;</span><span class="s2">p</span><span class="s1">&gt;It's casinos in jackets. Suits with Discord accounts. JPEGs and jargon.&lt;/</span><span class="s2">p</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;</span><span class="s2">p</span><span class="s1">&gt;The ideology died when the VC decks got better than the code.&lt;/</span><span class="s2">p</span><span class="s1">&gt;</span></p>
-<p class="p2"><span class="s5"><span class="Apple-converted-space">  </span>&lt;/</span><span class="s1">section</span><span class="s5">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">  </span></span></p>
-<p class="p3"><span class="s5"><span class="Apple-converted-space">  </span>&lt;</span><span class="s2">section </span><span class="s3">class</span><span class="s5">="</span><span class="s1">max-w-3xl mx-auto space-y-6</span><span class="s5">"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;</span><span class="s2">h2 </span><span class="s3">class</span><span class="s1">="</span><span class="s4">text-3xl font-bold</span><span class="s1">"&gt;🧠 AI IS GOD&lt;/</span><span class="s2">h2</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;</span><span class="s2">p</span><span class="s1">&gt;You don't need a dev. You need an outcome.&lt;/</span><span class="s2">p</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;</span><span class="s2">p</span><span class="s1">&gt;Intent → Language Model → Machine → Result&lt;/</span><span class="s2">p</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;</span><span class="s2">p</span><span class="s1">&gt;No GitHub. No Stack Overflow. No engineers crying in Slack.&lt;/</span><span class="s2">p</span><span class="s1">&gt;</span></p>
-<p class="p2"><span class="s5"><span class="Apple-converted-space">  </span>&lt;/</span><span class="s1">section</span><span class="s5">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">  </span></span></p>
-<p class="p3"><span class="s5"><span class="Apple-converted-space">  </span>&lt;</span><span class="s2">section </span><span class="s3">class</span><span class="s5">="</span><span class="s1">max-w-3xl mx-auto space-y-6</span><span class="s5">"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;</span><span class="s2">h2 </span><span class="s3">class</span><span class="s1">="</span><span class="s4">text-3xl font-bold</span><span class="s1">"&gt;🧨 LAUNCH IS THE ONLY THING THAT MATTERS&lt;/</span><span class="s2">h2</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;</span><span class="s2">p</span><span class="s1">&gt;Ship it or shut up. If it's not live, it's dead. If it takes more than 10 minutes, it's irrelevant.&lt;/</span><span class="s2">p</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;</span><span class="s2">p</span><span class="s1">&gt;Launch culture &gt; build culture. Speed is the new smart. Execution is the new alpha.&lt;/</span><span class="s2">p</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;</span><span class="s2">p</span><span class="s1">&gt;No one cares how clever your architecture is if no one ever uses it.&lt;/</span><span class="s2">p</span><span class="s1">&gt;</span></p>
-<p class="p2"><span class="s5"><span class="Apple-converted-space">  </span>&lt;/</span><span class="s1">section</span><span class="s5">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">  </span></span></p>
-<p class="p3"><span class="s5"><span class="Apple-converted-space">  </span>&lt;</span><span class="s2">section </span><span class="s3">class</span><span class="s5">="</span><span class="s1">max-w-3xl mx-auto space-y-6</span><span class="s5">"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;</span><span class="s2">h2 </span><span class="s3">class</span><span class="s1">="</span><span class="s4">text-3xl font-bold</span><span class="s1">"&gt;🏴‍☠️ THIS IS A DECLARATION OF WAR&lt;/</span><span class="s2">h2</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;</span><span class="s2">p</span><span class="s1">&gt;On dev worship. On launch calendars. On slow-ass "builders."&lt;/</span><span class="s2">p</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;</span><span class="s2">p</span><span class="s1">&gt;On safe bets and 18-month roadmaps. On crypto influencers who never shipped anything. On VC-funded noise. On clout farming clowns and fake decentralization.&lt;/</span><span class="s2">p</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;</span><span class="s2">p</span><span class="s1">&gt;With the vampire attack, we put six of the biggest protocols in the game to the test. Now, we're putting all of you to the test.&lt;/</span><span class="s2">p</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;</span><span class="s2">p</span><span class="s1">&gt;If you're a dev, be afraid. We're not coming for your job — we're coming for your relevance.&lt;/</span><span class="s2">p</span><span class="s1">&gt;</span></p>
-<p class="p2"><span class="s5"><span class="Apple-converted-space">  </span>&lt;/</span><span class="s1">section</span><span class="s5">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">  </span></span></p>
-<p class="p3"><span class="s5"><span class="Apple-converted-space">  </span>&lt;</span><span class="s2">section </span><span class="s3">class</span><span class="s5">="</span><span class="s1">max-w-3xl mx-auto space-y-6 text-center</span><span class="s5">"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;</span><span class="s2">h2 </span><span class="s3">class</span><span class="s1">="</span><span class="s4">text-3xl font-bold</span><span class="s1">"&gt;⚡ WHAT COMES NEXT?&lt;/</span><span class="s2">h2</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;</span><span class="s2">p</span><span class="s1">&gt;The future is built by those who move like machines. Launch like lunatics. Automate like gods.&lt;/</span><span class="s2">p</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;</span><span class="s2">p</span><span class="s1">&gt;And leave nothing behind but deployed contracts and broken egos.&lt;/</span><span class="s2">p</span><span class="s1">&gt;</span></p>
-<p class="p2"><span class="s5"><span class="Apple-converted-space">  </span>&lt;/</span><span class="s1">section</span><span class="s5">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">  </span></span></p>
-<p class="p3"><span class="s5"><span class="Apple-converted-space">  </span>&lt;</span><span class="s2">footer </span><span class="s3">class</span><span class="s5">="</span><span class="s1">text-center text-gray-500 text-sm pt-12 border-t border-gray-700</span><span class="s5">"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;</span><span class="s2">p</span><span class="s1">&gt;🪦 DEV IS DEAD. And if that offends you — good. You're already in the rearview.&lt;/</span><span class="s2">p</span><span class="s1">&gt;</span></p>
-<p class="p2"><span class="s5"><span class="Apple-converted-space">  </span>&lt;/</span><span class="s1">footer</span><span class="s5">&gt;</span></p>
-<p class="p5"><span class="s1"></span><br></p>
-<p class="p2"><span class="s5"><span class="Apple-converted-space">  </span>&lt;</span><span class="s1">script</span><span class="s5">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">    </span></span><span class="s1"><i>// Audio player functionality</i><i></i></span></p>
-<p class="p6"><span class="s5"><span class="Apple-converted-space">    </span></span><span class="s6">function</span><span class="s5"> </span><span class="s1">toggleAudio</span><span class="s5">() {</span></p>
-<p class="p6"><span class="s5"><span class="Apple-converted-space">      </span></span><span class="s6">const</span><span class="s5"> audio </span><span class="s1">=</span><span class="s5"> </span><span class="s1">document</span><span class="s5">.</span><span class="s1">getElementById</span><span class="s5">(</span><span class="s4">'manifesto-audio'</span><span class="s5">);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span></span><span class="s6">if</span><span class="s1"> (audio.paused) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>audio.</span><span class="s7">play</span><span class="s1">();</span></p>
-<p class="p3"><span class="s5"><span class="Apple-converted-space">        </span></span><span class="s7">document</span><span class="s5">.</span><span class="s7">querySelector</span><span class="s5">(</span><span class="s1">'.play-button'</span><span class="s5">).innerHTML </span><span class="s7">=</span><span class="s5"> </span><span class="s1">"⏸️ PAUSE MANIFESTO"</span><span class="s5">;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>} </span><span class="s6">else</span><span class="s1"> {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>audio.</span><span class="s7">pause</span><span class="s1">();</span></p>
-<p class="p3"><span class="s5"><span class="Apple-converted-space">        </span></span><span class="s7">document</span><span class="s5">.</span><span class="s7">querySelector</span><span class="s5">(</span><span class="s1">'.play-button'</span><span class="s5">).innerHTML </span><span class="s7">=</span><span class="s5"> </span><span class="s1">"▶️ LISTEN TO MANIFESTO"</span><span class="s5">;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span></span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">    </span></span><span class="s1"><i>// Audio ended event</i><i></i></span></p>
-<p class="p6"><span class="s5"><span class="Apple-converted-space">    </span></span><span class="s1">document</span><span class="s5">.</span><span class="s1">getElementById</span><span class="s5">(</span><span class="s4">'manifesto-audio'</span><span class="s5">).</span><span class="s1">addEventListener</span><span class="s5">(</span><span class="s4">'ended'</span><span class="s5">, </span><span class="s6">function</span><span class="s5">() {</span></p>
-<p class="p3"><span class="s5"><span class="Apple-converted-space">      </span></span><span class="s7">document</span><span class="s5">.</span><span class="s7">querySelector</span><span class="s5">(</span><span class="s1">'.play-button'</span><span class="s5">).innerHTML </span><span class="s7">=</span><span class="s5"> </span><span class="s1">"▶️ LISTEN TO MANIFESTO"</span><span class="s5">;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>});</span></p>
-<p class="p2"><span class="s5"><span class="Apple-converted-space">  </span>&lt;/</span><span class="s1">script</span><span class="s5">&gt;</span></p>
-<p class="p2"><span class="s5">&lt;/</span><span class="s1">body</span><span class="s5">&gt;</span></p>
-<p class="p7"><span class="s8">&lt;/</span><span class="s9">html</span><span class="s8">&gt;</span></p>
-<p class="p8"><span class="s10"></span><br></p>
-<p class="p8"><span class="s10"></span><br></p>
-<p class="p8"><span class="s10"></span><br></p>
-<p class="p8"><span class="s10"></span><br></p>
-<p class="p8"><span class="s10"></span><br></p>
-<p class="p8"><span class="s10"></span><br></p>
-<p class="p8"><span class="s10"></span><br></p>
-</body>
-</html>
+  <div class="content-wrapper text-white min-h-screen font-mono p-6 space-y-16">
+    <section class="text-center space-y-4">
+      <h1 class="text-5xl font-bold">🪦 DEV IS DEAD</h1>
+      <p class="text-xl">A Manifesto for the End of Everything</p>
+      <blockquote class="italic text-gray-400">"If you're still coding, you already lost." – Everyone in the future</blockquote>
+      
+      <div class="audio-player">
+        <audio id="manifesto-audio" preload="auto">
+          <source src="manifesto.mp3" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+        <button class="play-button" onclick="toggleAudio()">▶️ LISTEN TO MANIFESTO</button>
+      </div>
+    </section>
+    
+    <section class="max-w-3xl mx-auto space-y-6">
+      <h2 class="text-3xl font-bold">🪚 DEVS ARE DEAD</h2>
+      <p>You spent 6 years learning syntax. LLMs learned it in 6 minutes. You're not special. You're a keyboard middleman.</p>
+      <p>Abstraction killed the full-stack dev. LLMs killed the rest. You're not building — you're babysitting YAML files.</p>
+    </section>
+    
+    <section class="max-w-3xl mx-auto space-y-6">
+      <h2 class="text-3xl font-bold">⚰️ CRYPTO IS DEAD</h2>
+      <p>It's not decentralized. It's not fair. It's not about freedom.</p>
+      <p>It's casinos in jackets. Suits with Discord accounts. JPEGs and jargon.</p>
+      <p>The ideology died when the VC decks got better than the code.</p>
+    </section>
+    
+    <section class="max-w-3xl mx-auto space-y-6">
+      <h2 class="text-3xl font-bold">🧠 AI IS GOD</h2>
+      <p>You don't need a dev. You need an
