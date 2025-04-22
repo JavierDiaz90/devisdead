@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DEV IS DEAD - A Manifesto</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Monospace font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap">
+  <style>
+    body {
+      font-family: 'Space Mono', monospace;
+    }
+    .audio-player {
+      margin: 2rem auto;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .audio-player audio {
+      width: 100%;
+    }
+    .play-button {
+      margin-top: 1rem;
+      padding: 0.75rem 2rem;
+      background-color: #FF4545;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .play-button:hover {
+      background-color: #FF2525;
+    }
+  </style>
+</head>
+<body class="bg-black text-white min-h-screen font-mono p-6 space-y-16">
+  <section class="text-center space-y-4">
+    <h1 class="text-5xl font-bold">🪦 DEV IS DEAD</h1>
+    <p class="text-xl">A Manifesto for the End of Everything</p>
+    <blockquote class="italic text-gray-400">"If you're still coding, you already lost." – Everyone in the future</blockquote>
+    
+    <div class="audio-player">
+      <audio id="manifesto-audio" preload="auto">
+        <source src="manifesto.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+      <button class="play-button" onclick="toggleAudio()">▶️ LISTEN TO MANIFESTO</button>
+    </div>
+  </section>
+  
+  <section class="max-w-3xl mx-auto space-y-6">
+    <h2 class="text-3xl font-bold">🪚 DEVS ARE DEAD</h2>
+    <p>You spent 6 years learning syntax. LLMs learned it in 6 minutes. You're not special. You're a keyboard middleman.</p>
+    <p>Abstraction killed the full-stack dev. LLMs killed the rest. You're not building — you're babysitting YAML files.</p>
+  </section>
+  
+  <section class="max-w-3xl mx-auto space-y-6">
+    <h2 class="text-3xl font-bold">⚰️ CRYPTO IS DEAD</h2>
+    <p>It's not decentralized. It's not fair. It's not about freedom.</p>
+    <p>It's casinos in jackets. Suits with Discord accounts. JPEGs and jargon.</p>
+    <p>The ideology died when the VC decks got better than the code.</p>
+  </section>
+  
+  <section class="max-w-3xl mx-auto space-y-6">
+    <h2 class="text-3xl font-bold">🧠 AI IS GOD</h2>
+    <p>You don't need a dev. You need an outcome.</p>
+    <p>Intent → Language Model → Machine → Result</p>
+    <p>No GitHub. No Stack Overflow. No engineers crying in Slack.</p>
+  </section>
+  
+  <section class="max-w-3xl mx-auto space-y-6">
+    <h2 class="text-3xl font-bold">🧨 LAUNCH IS THE ONLY THING THAT MATTERS</h2>
+    <p>Ship it or shut up. If it's not live, it's dead. If it takes more than 10 minutes, it's irrelevant.</p>
+    <p>Launch culture > build culture. Speed is the new smart. Execution is the new alpha.</p>
+    <p>No one cares how clever your architecture is if no one ever uses it.</p>
+  </section>
+  
+  <section class="max-w-3xl mx-auto space-y-6">
+    <h2 class="text-3xl font-bold">🏴‍☠️ THIS IS A DECLARATION OF WAR</h2>
+    <p>On dev worship. On launch calendars. On slow-ass "builders."</p>
+    <p>On safe bets and 18-month roadmaps. On crypto influencers who never shipped anything. On VC-funded noise. On clout farming clowns and fake decentralization.</p>
+    <p>With the vampire attack, we put six of the biggest protocols in the game to the test. Now, we're putting all of you to the test.</p>
+    <p>If you're a dev, be afraid. We're not coming for your job — we're coming for your relevance.</p>
+  </section>
+  
+  <section class="max-w-3xl mx-auto space-y-6 text-center">
+    <h2 class="text-3xl font-bold">⚡ WHAT COMES NEXT?</h2>
+    <p>The future is built by those who move like machines. Launch like lunatics. Automate like gods.</p>
+    <p>And leave nothing behind but deployed contracts and broken egos.</p>
+  </section>
+  
+  <footer class="text-center text-gray-500 text-sm pt-12 border-t border-gray-700">
+    <p>🪦 DEV IS DEAD. And if that offends you — good. You're already in the rearview.</p>
+  </footer>
+
+  <script>
+    // Audio player functionality
+    function toggleAudio() {
+      const audio = document.getElementById('manifesto-audio');
+      if (audio.paused) {
+        audio.play();
+        document.querySelector('.play-button').innerHTML = "⏸️ PAUSE MANIFESTO";
+      } else {
+        audio.pause();
+        document.querySelector('.play-button').innerHTML = "▶️ LISTEN TO MANIFESTO";
+      }
+    }
+    
+    // Audio ended event
+    document.getElementById('manifesto-audio').addEventListener('ended', function() {
+      document.querySelector('.play-button').innerHTML = "▶️ LISTEN TO MANIFESTO";
+    });
+  </script>
+</body>
+</html>
