@@ -1,171 +1,415 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DEV IS DEAD - A Manifesto</title>
-  <userStyle>Normal</userStyle>
-  <!-- Tailwind CSS via CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Monospace font -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap">
-  <style>
-    body {
-      font-family: 'Space Mono', monospace;
-      background-color: black; /* Solid black background */
-    }
-    .content-wrapper {
-      min-height: 100vh;
-    }
-    h1, h2, p, blockquote {
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-    }
-    .audio-player {
-      margin: 2rem auto;
-      max-width: 400px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .audio-player audio {
-      display: none; /* Hide the audio controls */
-    }
-    .play-button {
-      margin-top: 1rem;
-      padding: 0.75rem 2rem;
-      background-color: #FF4545;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.3s;
-      box-shadow: 0 0 10px rgba(255, 69, 69, 0.5);
-      border: 2px solid rgba(255, 255, 255, 0.2);
-    }
-    .play-button:hover {
-      background-color: #FF2525;
-    }
-    .raw-image-container {
-      margin-top: 4rem;
-      width: 100%;
-      text-align: center;
-    }
-    .raw-image-container img {
-      max-width: 100%;
-      height: auto;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>山水 Shanshui · Dither + ASCII + Motion</title>
+<style>
+  :root { --ink: #5b4bd6; --ink2: #8a7bf0; --bg: #eeeefb; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; background: #05060c; overflow: hidden; }
+  body {
+    font-family: "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+    display: flex; align-items: center; justify-content: center;
+    color: #e6e6ff;
+  }
+
+  /* framed "card" that echoes the shared post */
+  .stage {
+    position: relative;
+    width: min(94vw, 1180px);
+    aspect-ratio: 16 / 10;
+    border-radius: 22px;
+    overflow: hidden;
+    background:
+      radial-gradient(120% 120% at 50% 0%, #f4f4ff 0%, #e7e7fb 45%, #dcd9f6 100%);
+    box-shadow: 0 40px 120px rgba(60,50,180,.45), 0 0 0 1px rgba(120,110,220,.25);
+    perspective: 1400px;
+  }
+
+  /* the ascii canvas gets 3D tilt */
+  #ascii {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    transform-style: preserve-3d;
+    transition: transform .18s ease-out;
+    will-change: transform;
+  }
+
+  .vignette {
+    position: absolute; inset: 0; pointer-events: none;
+    box-shadow: inset 0 0 120px rgba(70,55,170,.35), inset 0 0 40px rgba(255,255,255,.4);
+    border-radius: 22px;
+  }
+
+  /* overlay chrome like the tweet mock */
+  .top-bar {
+    position: absolute; top: 18px; left: 18px; right: 18px;
+    display: flex; justify-content: space-between; align-items: center;
+    pointer-events: none; z-index: 3;
+  }
+  .pill {
+    font-size: 12px; font-weight: 700; letter-spacing: .04em;
+    color: #f4f4ff; background: #14121f; padding: 7px 13px; border-radius: 999px;
+    box-shadow: 0 6px 18px rgba(0,0,0,.3);
+  }
+  .pill + .pill { margin-left: 8px; }
+  .toggle {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 700; color: #2a2540;
+  }
+  .dot { width: 34px; height: 18px; border-radius: 999px; background: #6c5ce7;
+         position: relative; }
+  .dot::after { content:""; position:absolute; top:2px; right:2px; width:14px; height:14px;
+         border-radius:50%; background:#fff; }
+
+  .headline {
+    position: absolute; left: 34px; bottom: 92px; z-index: 3; max-width: 60%;
+    pointer-events: none;
+  }
+  .headline h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(22px, 3.4vw, 46px); line-height: 1.02; color: #17142a;
+    letter-spacing: -.01em;
+  }
+  .headline h1 span { color: var(--ink); }
+  .cols {
+    position: absolute; left: 34px; right: 34px; bottom: 26px; z-index: 3;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+    font-size: 10.5px; line-height: 1.4; color: #3b3556; pointer-events: none;
+  }
+  .cols b { display:block; font-size: 11px; color:#17142a; margin-bottom:4px; }
+
+  .hint {
+    position: absolute; bottom: -30px; left: 0; right: 0; text-align: center;
+    font-size: 12px; color: #6f6ab0; letter-spacing: .08em;
+  }
+  .hint b { color: #b9b3ff; cursor: pointer; }
+  @media (max-width: 640px){
+    .cols{ display:none; } .headline{ bottom: 30px; max-width: 84%; }
+  }
+</style>
 </head>
 <body>
-  <div class="content-wrapper text-white min-h-screen font-mono p-6 space-y-16">
-    <section class="text-center space-y-4">
-      <h1 class="text-5xl font-bold">🪦 DEV IS DEAD</h1>
-      <p class="text-xl">A Manifesto for the End of Everything</p>
-      <blockquote class="italic text-gray-400">"If you're still coding, you already lost." – Everyone in the future</blockquote>
-      
-      <div class="audio-player">
-        <audio id="manifesto-audio" preload="auto">
-          <source src="manifesto.mp3" type="audio/mpeg">
-          Your browser does not support the audio element.
-        </audio>
-        <button class="play-button" onclick="toggleAudio()">▶️ LISTEN TO MANIFESTO</button>
+  <div class="stage" id="stage">
+    <canvas id="ascii"></canvas>
+    <div class="vignette"></div>
+
+    <div class="top-bar">
+      <div>
+        <span class="pill">+ 新水墨 New Ink</span>
+        <span class="pill">桂林 Guilin</span>
       </div>
-    </section>
-    
-    <section class="max-w-3xl mx-auto space-y-6 text-center">
-      <h2 class="text-3xl font-bold">🏴 A WAR DECLARED IN PLAIN TEXT</h2>
-      <p class="font-bold">This isn't critique.<br>
-      This is a eulogy.</p>
-      
-      <p>We're burying the Dev God.<br>
-      We're burning the temples of code.<br>
-      We're marching the architects off the edge of relevance.</p>
-      
-      <p>We've seen what comes next:</p>
-      
-      <p>In 2021, we tested six giants with a smile and a spark.<br>
-      We tore liquidity from their vaults — and they howled.<br>
-      That was warm-up.</p>
-      
-      <p>Now we're testing <strong>all of you.</strong></p>
-      
-      <p>If you write code for clout — run.<br>
-      If you delay to perfect — rot.<br>
-      If you're still proud to be a developer — be afraid.</p>
-      
-      <p>Because we don't need you anymore.<br>
-      We have something faster. Colder. Unstoppable.</p>
-    </section>
-    
-    <section class="max-w-3xl mx-auto space-y-6">
-      <h2 class="text-3xl font-bold">🪚 DEVS ARE DEAD</h2>
-      <p>You spent 6 years learning syntax. LLMs learned it in 6 minutes. You're not special. You're a keyboard middleman.</p>
-      <p>Abstraction killed the full-stack dev. LLMs killed the rest. You're not building — you're babysitting YAML files.</p>
-    </section>
-    
-    <section class="max-w-3xl mx-auto space-y-6">
-      <h2 class="text-3xl font-bold">⚰️ CRYPTO IS DEAD</h2>
-      <p>It's not decentralized. It's not fair. It's not about freedom.</p>
-      <p>It's casinos in jackets. Suits with Discord accounts. JPEGs and jargon.</p>
-      <p>The ideology died when the VC decks got better than the code.</p>
-    </section>
-    
-    <section class="max-w-3xl mx-auto space-y-6">
-      <h2 class="text-3xl font-bold">🧠 AI IS GOD</h2>
-      <p>You don't need a dev. You need an outcome.</p>
-      <p>Intent → Language Model → Machine → Result</p>
-      <p>No GitHub. No Stack Overflow. No engineers crying in Slack.</p>
-    </section>
-    
-    <section class="max-w-3xl mx-auto space-y-6">
-      <h2 class="text-3xl font-bold">🧨 LAUNCH IS THE ONLY THING THAT MATTERS</h2>
-      <p>Ship it or shut up. If it's not live, it's dead. If it takes more than 10 minutes, it's irrelevant.</p>
-      <p>Launch culture > build culture. Speed is the new smart. Execution is the new alpha.</p>
-      <p>No one cares how clever your architecture is if no one ever uses it.</p>
-    </section>
-    
-    <section class="max-w-3xl mx-auto space-y-6">
-      <h2 class="text-3xl font-bold">🏴‍☠️ THIS IS A DECLARATION OF WAR</h2>
-      <p>On dev worship. On launch calendars. On slow-ass "builders."</p>
-      <p>On safe bets and 18-month roadmaps. On crypto influencers who never shipped anything. On VC-funded noise. On clout farming clowns and fake decentralization.</p>
-      <p>With the vampire attack, we put six of the biggest protocols in the game to the test. Now, we're putting all of you to the test.</p>
-      <p>If you're a dev, be afraid. We're not coming for your job — we're coming for your relevance.</p>
-    </section>
-    
-    <section class="max-w-3xl mx-auto space-y-6 text-center">
-      <h2 class="text-3xl font-bold">⚡ WHAT COMES NEXT?</h2>
-      <p>The future is built by those who move like machines. Launch like lunatics. Automate like gods.</p>
-      <p>And leave nothing behind but deployed contracts and broken egos.</p>
-    </section>
-    
-    <footer class="text-center text-gray-500 text-sm pt-12 border-t border-gray-700">
-      <p>🪦 DEV IS DEAD. And if that offends you — good. You're already in the rearview.</p>
-    </footer>
-  </div>
-  
-  <!-- Raw image at the bottom -->
-  <div class="raw-image-container">
-    <img src="background.jpg" alt="Manifesto Background Image">
+      <div class="toggle"><span>实时 Motion</span><span class="dot"></span></div>
+    </div>
+
+    <div class="headline">
+      <h1>The mountains move <span>long before</span><br>the ink ever dries.</h1>
+    </div>
+
+    <div class="cols">
+      <div><b>DITHER</b>Ordered 8×8 Bayer stipple maps every tone to indigo grain — no greys, only density.</div>
+      <div><b>ASCII</b>Each cell is a real glyph, from ` ` to `@`, chosen by the brightness under it.</div>
+      <div><b>MOTION</b>A flowing displacement field ripples the river and drifts the peaks frame by frame.</div>
+      <div><b>3D</b>The whole plate tilts to your cursor on a live perspective — depth from parallax.</div>
+    </div>
+
+    <div class="hint">MOVE YOUR CURSOR · <b id="regen">CLICK TO SHIFT THE SEASON</b></div>
   </div>
 
-  <script>
-    // Audio player functionality
-    function toggleAudio() {
-      const audio = document.getElementById('manifesto-audio');
-      if (audio.paused) {
-        audio.play();
-        document.querySelector('.play-button').innerHTML = "⏸️ PAUSE MANIFESTO";
-      } else {
-        audio.pause();
-        document.querySelector('.play-button').innerHTML = "▶️ LISTEN TO MANIFESTO";
-      }
+<script>
+(() => {
+  "use strict";
+  const view = document.getElementById('ascii');
+  const vctx = view.getContext('2d', { alpha: true });
+  const stage = document.getElementById('stage');
+
+  // ---- offscreen scene (drawn once per "season") ----
+  const SW = 480, SH = 300;                 // scene sample resolution
+  const scene = document.createElement('canvas');
+  scene.width = SW; scene.height = SH;
+  const sctx = scene.getContext('2d');
+  let sceneData = null;
+
+  // brightness lookup after draw
+  function grabScene() {
+    const img = sctx.getImageData(0, 0, SW, SH).data;
+    const lum = new Float32Array(SW * SH);
+    for (let i = 0, p = 0; i < lum.length; i++, p += 4) {
+      // perceptual luminance 0..1
+      lum[i] = (0.299 * img[p] + 0.587 * img[p+1] + 0.114 * img[p+2]) / 255;
     }
-    
-    // Audio ended event
-    document.getElementById('manifesto-audio').addEventListener('ended', function() {
-      document.querySelector('.play-button').innerHTML = "▶️ LISTEN TO MANIFESTO";
-    });
-  </script>
+    sceneData = lum;
+  }
+
+  // palette of "seasons" — background tint + ink color
+  const seasons = [
+    { name:'spring', sky:['#f6f4ff','#e4e0fb'], ink:'#5b4bd6', sun:'#ff6b6b' },
+    { name:'dusk',   sky:['#fff1ea','#e9dcff'], ink:'#7b2ff7', sun:'#ff4d6d' },
+    { name:'jade',   sky:['#eefcf6','#dcf0ff'], ink:'#0e9f8f', sun:'#ff8e3c' },
+    { name:'ink',    sky:['#f3f3f6','#dadae6'], ink:'#2b2b3a', sun:'#e2402f' },
+  ];
+  let seasonIdx = 0;
+
+  function lerpHex(a){ return a; }
+
+  // draw a Guilin / Li-river karst landscape in ink-painting spirit
+  function drawScene(s) {
+    const g = sctx;
+    g.clearRect(0,0,SW,SH);
+
+    // sky gradient (light -> denser)
+    const sky = g.createLinearGradient(0,0,0,SH);
+    sky.addColorStop(0, s.sky[0]);
+    sky.addColorStop(1, s.sky[1]);
+    g.fillStyle = sky; g.fillRect(0,0,SW,SH);
+
+    // sun / moon disc with soft glow
+    const cx = SW*0.72, cy = SH*0.26, r = 34;
+    const glow = g.createRadialGradient(cx,cy,4, cx,cy,r*2.6);
+    glow.addColorStop(0, s.sun);
+    glow.addColorStop(0.35, s.sun);
+    glow.addColorStop(1, 'rgba(255,255,255,0)');
+    g.globalAlpha = 0.9; g.fillStyle = glow;
+    g.beginPath(); g.arc(cx,cy,r*2.6,0,7); g.fill();
+    g.globalAlpha = 1; g.fillStyle = s.sun;
+    g.beginPath(); g.arc(cx,cy,r,0,7); g.fill();
+
+    const waterY = SH*0.72;
+
+    // helper: a single karst peak (bell curve) filled with vertical gradient
+    function peak(px, baseY, w, h, dark) {
+      const grad = g.createLinearGradient(0, baseY-h, 0, baseY);
+      grad.addColorStop(0, `rgba(40,35,70,${dark})`);
+      grad.addColorStop(1, `rgba(40,35,70,${dark*0.35})`);
+      g.fillStyle = grad;
+      g.beginPath();
+      g.moveTo(px - w, baseY);
+      for (let t=0; t<=1; t+=0.04){
+        const x = px - w + 2*w*t;
+        // asymmetric bell -> classic sugarloaf peak
+        const bell = Math.exp(-Math.pow((t-0.5)*3.1, 2));
+        const y = baseY - h*bell*(0.85 + 0.15*Math.sin(t*9+px));
+        g.lineTo(x, y);
+      }
+      g.lineTo(px + w, baseY);
+      g.closePath(); g.fill();
+    }
+
+    // far range (pale)
+    for (let i=0;i<7;i++){
+      const px = (i/6)*SW + 20;
+      peak(px, waterY-6, 70+ (i%3)*18, 60 + ((i*37)%40), 0.22);
+    }
+    // mid range
+    const mids = [
+      [SW*0.10, 150], [SW*0.24, 210], [SW*0.40, 120],
+      [SW*0.58, 190], [SW*0.80, 240], [SW*0.93, 140]
+    ];
+    mids.forEach(([px,h],i)=> peak(px, waterY, 52 + (i%2)*20, h, 0.55));
+
+    // near dark peak (foreground anchor, left)
+    peak(SW*0.16, waterY+4, 74, 175, 0.85);
+
+    // ---- pagoda on the mid-left peak ----
+    drawPagoda(SW*0.40, waterY - 118, 20);
+
+    // ---- little sail boat on the water ----
+    drawBoat(SW*0.60, waterY + 20, 22);
+
+    // water: mirror the sky faintly + horizontal ink bands
+    const wg = g.createLinearGradient(0, waterY, 0, SH);
+    wg.addColorStop(0, 'rgba(80,70,150,0.10)');
+    wg.addColorStop(1, 'rgba(80,70,150,0.30)');
+    g.fillStyle = wg; g.fillRect(0, waterY, SW, SH-waterY);
+    g.strokeStyle = 'rgba(30,25,60,0.25)'; g.lineWidth = 1;
+    for (let y = waterY+8; y < SH; y += 9){
+      g.globalAlpha = 0.5*(1 - (y-waterY)/(SH-waterY));
+      g.beginPath(); g.moveTo(0,y); g.lineTo(SW,y); g.stroke();
+    }
+    g.globalAlpha = 1;
+
+    grabScene();
+  }
+
+  function drawPagoda(x, baseY, s){
+    const g = sctx; g.fillStyle = 'rgba(25,20,45,0.9)';
+    g.strokeStyle = 'rgba(25,20,45,0.9)'; g.lineWidth = 2;
+    let y = baseY;
+    for (let lvl=0; lvl<3; lvl++){
+      const w = s*(1 - lvl*0.22);
+      // roof (curved eaves)
+      g.beginPath();
+      g.moveTo(x - w, y);
+      g.quadraticCurveTo(x, y - s*0.5, x + w, y);
+      g.quadraticCurveTo(x + w*0.5, y - s*0.14, x, y - s*0.14);
+      g.quadraticCurveTo(x - w*0.5, y - s*0.14, x - w, y);
+      g.closePath(); g.fill();
+      // body
+      const bw = w*0.6;
+      g.fillRect(x - bw, y, bw*2, s*0.5);
+      y += s*0.62;
+    }
+    // spire
+    g.beginPath(); g.moveTo(x, baseY - s*0.5); g.lineTo(x, baseY - s*0.9); g.stroke();
+  }
+
+  function drawBoat(x, y, s){
+    const g = sctx; g.fillStyle = 'rgba(20,15,40,0.85)';
+    g.beginPath();               // hull
+    g.moveTo(x - s, y); g.quadraticCurveTo(x, y + s*0.5, x + s, y);
+    g.closePath(); g.fill();
+    g.beginPath();               // sail
+    g.moveTo(x, y - s*1.3); g.lineTo(x + s*0.7, y - 2); g.lineTo(x - 1, y - 2);
+    g.closePath(); g.fill();
+  }
+
+  // ---- ASCII ramp (light bg => space is bright, @ is dark) ----
+  const RAMP = " .`':,-~+=*co683%#@";
+  const RLEN = RAMP.length;
+
+  // 8x8 Bayer ordered dither matrix (normalised 0..1)
+  const BAYER = (() => {
+    const m = [
+      0,48,12,60,3,51,15,63, 32,16,44,28,35,19,47,31,
+      8,56,4,52,11,59,7,55, 40,24,36,20,43,27,39,23,
+      2,50,14,62,1,49,13,61, 34,18,46,30,33,17,45,29,
+      10,58,6,54,9,57,5,53, 42,26,38,22,41,25,37,21
+    ];
+    return m.map(v => (v + 0.5) / 64);
+  })();
+
+  // grid geometry
+  let COLS = 150, ROWS = 90, cell = 8, dpr = 1;
+  function layout() {
+    const rect = stage.getBoundingClientRect();
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    view.width = Math.round(rect.width * dpr);
+    view.height = Math.round(rect.height * dpr);
+    COLS = Math.max(70, Math.min(190, Math.floor(rect.width / 6.4)));
+    cell = (rect.width * dpr) / COLS;
+    ROWS = Math.floor((rect.height * dpr) / cell);
+    vctx.textBaseline = 'top';
+    vctx.font = `${cell * 1.02}px "SFMono-Regular", Menlo, Consolas, monospace`;
+  }
+
+  // moving birds (analytic, drawn in ascii pass)
+  const birds = Array.from({length:4}, (_,i)=>({
+    y: 0.12 + i*0.045, phase: i*1.7, sp: 0.05 + i*0.012, amp: 0.02
+  }));
+
+  function sampleLum(sx, sy) {
+    // clamp + nearest sample from scene luminance buffer
+    let x = sx < 0 ? 0 : sx > SW-1 ? SW-1 : sx;
+    let y = sy < 0 ? 0 : sy > SH-1 ? SH-1 : sy;
+    return sceneData[(y|0) * SW + (x|0)];
+  }
+
+  let t = 0, mx = 0, my = 0, tx = 0, ty = 0;
+
+  function frame() {
+    t += 0.016;
+    // ease tilt toward mouse
+    tx += (mx - tx) * 0.06;
+    ty += (my - ty) * 0.06;
+    view.style.transform =
+      `rotateY(${tx*9}deg) rotateX(${-ty*7}deg) translateZ(0)`;
+
+    const s = seasons[seasonIdx];
+    vctx.clearRect(0, 0, view.width, view.height);
+
+    // per-frame flowing displacement field (the "motion")
+    const t1 = t * 0.9, t2 = t * 0.6;
+
+    for (let r = 0; r < ROWS; r++) {
+      // sample position in scene space for this row
+      const v = r / ROWS;
+      // row color: subtle vertical indigo gradient
+      const rowMix = v;
+      vctx.fillStyle = shade(s.ink, 0.15 + rowMix * 0.5);
+
+      let line = '';
+      for (let c = 0; c < COLS; c++) {
+        const u = c / COLS;
+
+        // flow: ripple stronger toward the water (bottom)
+        const water = Math.max(0, (v - 0.62) / 0.38);
+        const flow = 1 + water * 4;
+        const dx = Math.sin(v * 14 + t1) * (1.4 + water * 4) +
+                   Math.sin(v * 7 - t2 + u * 4) * 1.0;
+        const dy = Math.cos(u * 10 + t1) * (0.8 + water * 2) * flow;
+
+        // parallax by cursor — nearer (darker/lower) shifts more
+        let sx = u * SW + dx + tx * 10 * (0.3 + v);
+        let sy = v * SH + dy + ty * 8 * (0.3 + v);
+
+        let b = sampleLum(sx, sy);
+
+        // gentle breathing highlight sweeping across
+        b += 0.06 * Math.sin(u * 3 - t * 1.3);
+
+        // birds: darken cells the bird passes through
+        for (const bd of birds) {
+          const bxc = ((bd.sp * t + bd.phase) % 1.25) - 0.15; // -0.15..1.10
+          const byc = bd.y + Math.sin(t * 1.2 + bd.phase) * bd.amp;
+          const ddx = u - bxc, ddy = v - byc;
+          // a shallow "V" — two wings
+          const wing = Math.abs(ddy + Math.abs(ddx) * 0.5);
+          if (Math.abs(ddx) < 0.03 && wing < 0.012) b -= 0.6;
+        }
+
+        // clamp
+        b = b < 0 ? 0 : b > 1 ? 1 : b;
+
+        // ordered dither: perturb before quantising to ramp
+        const thr = BAYER[(r & 7) * 8 + (c & 7)];
+        let bd2 = b + (thr - 0.5) * 0.16;
+        bd2 = bd2 < 0 ? 0 : bd2 > 1 ? 1 : bd2;
+
+        // light bg: dark scene => dense glyph. invert brightness for ramp.
+        const idx = Math.round((1 - bd2) * (RLEN - 1));
+        line += RAMP[idx];
+      }
+      vctx.fillText(line, 0, r * cell);
+    }
+
+    requestAnimationFrame(frame);
+  }
+
+  // shade a hex color toward darkness by factor 0..1 (0=orig, 1=black-ish alpha)
+  function shade(hex, amt) {
+    const n = parseInt(hex.slice(1), 16);
+    const rr = (n >> 16) & 255, gg = (n >> 8) & 255, bb = n & 255;
+    const a = 0.55 + amt * 0.45; // more opaque lower rows
+    return `rgba(${rr},${gg},${bb},${a})`;
+  }
+
+  // ---- interaction ----
+  window.addEventListener('pointermove', e => {
+    const rect = stage.getBoundingClientRect();
+    mx = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+    my = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+  });
+  window.addEventListener('pointerleave', () => { mx = 0; my = 0; });
+
+  function nextSeason() {
+    seasonIdx = (seasonIdx + 1) % seasons.length;
+    const s = seasons[seasonIdx];
+    document.documentElement.style.setProperty('--ink', s.ink);
+    stage.style.background =
+      `radial-gradient(120% 120% at 50% 0%, ${s.sky[0]} 0%, ${s.sky[1]} 55%, ${s.sky[1]} 100%)`;
+    drawScene(s);
+  }
+  document.getElementById('regen').addEventListener('click', nextSeason);
+  stage.addEventListener('click', e => { if (e.target === stage) nextSeason(); });
+
+  window.addEventListener('resize', layout);
+
+  // boot
+  layout();
+  drawScene(seasons[seasonIdx]);
+  requestAnimationFrame(frame);
+})();
+</script>
 </body>
 </html>
