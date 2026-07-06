@@ -3,19 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>熊猫 Panda · Dither + ASCII + Motion</title>
+<title>墨 · Dither + ASCII + Motion</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
-  html,body { height:100%; background:#05060c; overflow:hidden; }
+  html,body { height:100%; background:#0a0806; overflow:hidden; }
   body {
     font-family:"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
-    display:flex; align-items:center; justify-content:center; color:#e6e6ff;
+    display:flex; align-items:center; justify-content:center; color:#efe8da;
   }
   .stage {
     position:relative; width:min(94vw,1180px); aspect-ratio:16/10;
     border-radius:22px; overflow:hidden;
-    background:radial-gradient(120% 120% at 50% 0%,#f5f4ff 0%,#e9e7fb 55%,#e3e0f7 100%);
-    box-shadow:0 40px 120px rgba(60,50,180,.45),0 0 0 1px rgba(120,110,220,.25);
+    box-shadow:0 40px 120px var(--glow,rgba(80,60,30,.45)),0 0 0 1px rgba(120,100,70,.25);
     perspective:1500px;
   }
   #ascii {
@@ -24,29 +23,38 @@
   }
   .vignette {
     position:absolute; inset:0; pointer-events:none; border-radius:22px;
-    box-shadow:inset 0 0 130px rgba(70,55,170,.30),inset 0 0 46px rgba(255,255,255,.45);
+    box-shadow:inset 0 0 130px rgba(50,38,24,.26),inset 0 0 46px rgba(255,255,255,.35);
   }
+  .stage.drop { outline:3px dashed var(--inkc,#2a251d); outline-offset:-12px; }
   .top-bar {
     position:absolute; top:18px; left:18px; right:18px; z-index:3;
     display:flex; justify-content:space-between; align-items:center; pointer-events:none;
   }
-  .pill { font-size:12px; font-weight:700; letter-spacing:.04em; color:#f4f4ff;
-    background:#14121f; padding:7px 13px; border-radius:999px; box-shadow:0 6px 18px rgba(0,0,0,.3); }
+  .pill { font-size:12px; font-weight:700; letter-spacing:.04em; color:#f6f1e6;
+    background:#191410; padding:7px 13px; border-radius:999px; box-shadow:0 6px 18px rgba(0,0,0,.3); }
   .pill + .pill { margin-left:8px; }
-  .toggle { display:flex; align-items:center; gap:8px; font-size:12px; font-weight:700; color:#2a2540; }
-  .dot { width:34px; height:18px; border-radius:999px; background:#6c5ce7; position:relative; }
+  .pill.btn { pointer-events:auto; cursor:pointer; }
+  .pill.btn:hover { background:#2c241c; }
+  .toggle { display:flex; align-items:center; gap:8px; font-size:12px; font-weight:700;
+    color:#2f2a22; pointer-events:auto; cursor:pointer; user-select:none; }
+  .dot { width:34px; height:18px; border-radius:999px; background:var(--inkc,#2a251d); position:relative; transition:background .2s; }
   .dot::after { content:""; position:absolute; top:2px; right:2px; width:14px; height:14px; border-radius:50%; background:#fff; }
+  .dot.off { background:#a89e8c; }
+  .dot.off::after { right:auto; left:2px; }
   .headline { position:absolute; left:34px; bottom:92px; z-index:3; max-width:56%; pointer-events:none; }
-  .headline h1 { font-family:Georgia,"Times New Roman",serif; font-size:clamp(22px,3.3vw,44px);
-    line-height:1.03; color:#17142a; letter-spacing:-.01em; }
-  .headline h1 span { color:#5b4bd6; }
+  .headline h1 { font-family:Georgia,"Times New Roman",serif; font-size:clamp(20px,3.2vw,44px);
+    line-height:1.03; color:#1d1812; letter-spacing:-.01em; text-wrap:balance; }
+  .headline h1 span { color:var(--inkc,#bf3a2b); }
   .cols { position:absolute; left:34px; right:34px; bottom:26px; z-index:3;
     display:grid; grid-template-columns:repeat(4,1fr); gap:20px;
-    font-size:10.5px; line-height:1.4; color:#3b3556; pointer-events:none; }
-  .cols b { display:block; font-size:11px; color:#17142a; margin-bottom:4px; }
+    font-size:10.5px; line-height:1.4; color:#4a4133; pointer-events:none; }
+  .cols b { display:block; font-size:11px; color:#1d1812; margin-bottom:4px; }
   .hint { position:absolute; bottom:-30px; left:0; right:0; text-align:center;
-    font-size:12px; color:#6f6ab0; letter-spacing:.08em; }
-  .hint b { color:#b9b3ff; cursor:pointer; }
+    font-size:11px; color:#9c8f76; letter-spacing:.08em; white-space:nowrap; }
+  .hint b { color:#e8d9b8; cursor:pointer; }
+  .stage.portrait .cols { display:none; }
+  .stage.portrait .headline { bottom:26px; max-width:86%; }
+  .stage.portrait .headline h1 { font-size:clamp(18px,4.6vw,34px); }
   @media (max-width:640px){ .cols{display:none;} .headline{bottom:30px; max-width:82%;} }
 </style>
 </head>
@@ -55,50 +63,125 @@
     <canvas id="ascii"></canvas>
     <div class="vignette"></div>
     <div class="top-bar">
-      <div><span class="pill">+ 新水墨 New Ink</span><span class="pill">熊猫 Panda</span></div>
-      <div class="toggle"><span>实时 Motion</span><span class="dot"></span></div>
+      <div>
+        <span class="pill" id="srcPill">墨 Ink</span><label class="pill btn">↑ 换图 Swap Image<input
+          id="file" type="file" accept="image/*" hidden></label>
+      </div>
+      <div class="toggle" id="motion"><span>实时 Motion</span><span class="dot" id="dot"></span></div>
     </div>
-    <div class="headline"><h1>Still, until <span>you look closer</span>—<br>then the ink breathes.</h1></div>
+    <div class="headline"><h1 id="headline"></h1></div>
     <div class="cols">
-      <div><b>DITHER</b>Ordered Bayer stipple maps every tone to indigo grain — no greys, only density.</div>
+      <div><b>DITHER</b>Ordered Bayer stipple maps every tone to ink grain — no greys, only density.</div>
       <div><b>ASCII</b>Each cell is a real glyph, from ` ` to `@`, chosen by the brightness under it.</div>
       <div><b>MOTION</b>The stipple boils frame by frame — a living halftone, not a frozen one.</div>
       <div><b>3D</b>The whole plate tilts to your cursor on a live perspective, with parallax depth.</div>
     </div>
-    <div class="hint">MOVE YOUR CURSOR · <b id="regen">CLICK TO CHANGE THE INK</b></div>
+    <div class="hint">MOVE · <b id="regen">CLICK TO CHANGE THE INK</b> · DROP ANY IMAGE</div>
   </div>
 
 <script>
 (() => {
   "use strict";
-  const view = document.getElementById('ascii');
-  const vctx = view.getContext('2d', { alpha:true });
+  const view  = document.getElementById('ascii');
+  const vctx  = view.getContext('2d', { alpha:true });
   const stage = document.getElementById('stage');
 
-  const SW = 768, SH = 480;
+  // ---------- source scene: an image when available, procedural panda otherwise ----------
+  let SW = 768, SH = 480;
   const scene = document.createElement('canvas');
-  scene.width = SW; scene.height = SH;
-  const sctx = scene.getContext('2d');
-  let lum = new Float32Array(SW*SH);
+  let sctx = scene.getContext('2d', { willReadFrequently:true });
+  let lum = new Float32Array(SW*SH);   // brightness 0..1 per scene pixel
+  let red = new Uint8Array(SW*SH);     // 1 = strongly red pixel -> accent ink (sun, seals, mouth)
 
-  const inks = [
-    { name:'indigo', c:'#5b4bd6' },
-    { name:'violet', c:'#7b2ff7' },
-    { name:'ink',    c:'#22202e' },
-    { name:'jade',   c:'#0e8f80' },
+  // ink palettes: paper ground + main ink + accent for red pixels
+  const palettes = [
+    { name:'sumi',      paper:['#f2ead6','#e2d4b4'], ink:'#2a251d', accent:'#bf3a2b', glow:'rgba(80,60,30,.5)'  },
+    { name:'indigo',    paper:['#f5f4ff','#e3e0f7'], ink:'#5b4bd6', accent:'#d8433a', glow:'rgba(60,50,180,.45)'},
+    { name:'vermilion', paper:['#f8f1e4','#eeddc2'], ink:'#a03325', accent:'#26221c', glow:'rgba(140,50,30,.42)'},
+    { name:'jade',      paper:['#eef7f1','#d9eee1'], ink:'#176b57', accent:'#bf3a2b', glow:'rgba(20,90,70,.42)' },
   ];
-  let inkIdx = 0;
+  let palIdx = 0;
 
-  // ---------- draw a giant panda, full-bleed, soft-shaded for photographic dither ----------
-  function drawScene() {
+  function setPalette(i){
+    palIdx = ((i % palettes.length) + palettes.length) % palettes.length;
+    const p = palettes[palIdx];
+    stage.style.background =
+      `radial-gradient(120% 120% at 50% 0%, ${p.paper[0]} 0%, ${p.paper[1]} 100%)`;
+    stage.style.setProperty('--glow', p.glow);
+    stage.style.setProperty('--inkc', p.ink);
+  }
+
+  function setSource(kind){
+    const pill = document.getElementById('srcPill');
+    const h1 = document.getElementById('headline');
+    if (kind === 'dragon'){
+      pill.textContent = '龍 Dragon';
+      h1.innerHTML = 'The dragon doesn&rsquo;t move — <span>the ink does</span>.';
+      document.title = '龍 Dragon · Dither + ASCII + Motion';
+      setPalette(0);
+    } else if (kind === 'custom'){
+      pill.textContent = '你的图 Your Image';
+      h1.innerHTML = 'Any image, reborn as <span>ten thousand glyphs</span>.';
+      document.title = '墨 · Dither + ASCII + Motion';
+    } else {
+      pill.textContent = '熊猫 Panda';
+      h1.innerHTML = 'Still, until <span>you look closer</span> — then the ink breathes.';
+      document.title = '熊猫 Panda · Dither + ASCII + Motion';
+      setPalette(1);
+    }
+  }
+
+  // size the scene buffers + the visible card to an aspect ratio
+  function setAspect(ar){
+    ar = Math.max(0.60, Math.min(1.9, ar));
+    if (ar >= 1) { SW = 768; SH = Math.round(768/ar); }
+    else         { SH = 720; SW = Math.round(720*ar); }
+    scene.width = SW; scene.height = SH;
+    sctx = scene.getContext('2d', { willReadFrequently:true });
+    lum = new Float32Array(SW*SH);
+    red = new Uint8Array(SW*SH);
+    stage.style.aspectRatio = `${ar}`;
+    stage.style.width = `min(94vw, 1180px, calc(86vh * ${ar}))`;
+    stage.classList.toggle('portrait', ar < 0.95);
+    layout();
+  }
+
+  function grab(stretchContrast){
+    const d = sctx.getImageData(0,0,SW,SH).data;
+    for(let i=0,p=0;i<lum.length;i++,p+=4){
+      const r=d[p], g=d[p+1], b=d[p+2];
+      lum[i] = (0.299*r+0.587*g+0.114*b)/255;
+      red[i] = (r-g>52 && r-b>62 && r>115) ? 1 : 0;
+    }
+    if (stretchContrast){
+      // stretch 2nd..98th percentile to full range so any photo dithers richly
+      const s=[]; for(let i=0;i<lum.length;i+=7) s.push(lum[i]);
+      s.sort((a,b)=>a-b);
+      const lo=s[Math.floor(s.length*0.02)], hi=s[Math.floor(s.length*0.98)];
+      if (hi-lo>0.05){ const k=1/(hi-lo);
+        for(let i=0;i<lum.length;i++){ const v=(lum[i]-lo)*k; lum[i]=v<0?0:v>1?1:v; } }
+    }
+  }
+
+  // draw a loaded image into the scene (cover-crop) and sample it
+  function useImage(img, kind){
+    const iw = img.naturalWidth||img.width, ih = img.naturalHeight||img.height;
+    if(!iw||!ih) return;
+    setAspect(iw/ih);
+    const sc = Math.max(SW/iw, SH/ih);
+    sctx.fillStyle='#fff'; sctx.fillRect(0,0,SW,SH);
+    sctx.drawImage(img, (SW-iw*sc)/2, (SH-ih*sc)/2, iw*sc, ih*sc);
+    grab(true);
+    setSource(kind);
+  }
+
+  // ---------- procedural panda (fallback until an image is provided) ----------
+  function drawPanda(){
+    setAspect(16/10);
     const g = sctx;
-    g.clearRect(0,0,SW,SH);
-
-    // soft studio background — NOT pure white, so the dither stipples full-bleed
     const bg = g.createLinearGradient(0,0,0,SH);
     bg.addColorStop(0,'#e7e4f5'); bg.addColorStop(1,'#c3bce1');
     g.fillStyle = bg; g.fillRect(0,0,SW,SH);
-    // spotlight behind the head lifts the centre; edges stay grainy (vignette)
     const spot = g.createRadialGradient(SW*0.5,SH*0.44,30, SW*0.5,SH*0.5,SW*0.60);
     spot.addColorStop(0,'rgba(255,255,255,0.85)');
     spot.addColorStop(0.6,'rgba(240,238,250,0.35)');
@@ -109,46 +192,33 @@
     vig.addColorStop(1,'rgba(90,82,150,0.45)');
     g.fillStyle = vig; g.fillRect(0,0,SW,SH);
 
-    // faint bamboo on the flanks for context + full-frame texture
     bamboo(SW*0.085, 0.24); bamboo(SW*0.93, 0.30);
-
     const cx = SW*0.5, cy = SH*0.50, R = SH*0.42;
 
-    // soft rim/halo just outside the head so the round face reads as a form
     const rim = g.createRadialGradient(cx,cy,R*0.82, cx,cy,R*1.32);
     rim.addColorStop(0,'rgba(66,58,122,0)');
     rim.addColorStop(0.5,'rgba(66,58,122,0.40)');
     rim.addColorStop(1,'rgba(66,58,122,0)');
     g.fillStyle = rim; g.fillRect(0,0,SW,SH);
 
-    // ---- ears (dark, soft) ----
     ear(cx - R*0.78, cy - R*0.82, R*0.42);
     ear(cx + R*0.78, cy - R*0.82, R*0.42);
 
-    // ---- head: white sphere with radial shading (top-lit) ----
     const head = g.createRadialGradient(cx, cy - R*0.28, R*0.15, cx, cy + R*0.15, R*1.18);
-    head.addColorStop(0,'#ffffff');
-    head.addColorStop(0.62,'#f2f0fb');
-    head.addColorStop(0.86,'#d7d2ee');
-    head.addColorStop(1,'#b7b0dc');
+    head.addColorStop(0,'#ffffff'); head.addColorStop(0.62,'#f2f0fb');
+    head.addColorStop(0.86,'#d7d2ee'); head.addColorStop(1,'#b7b0dc');
     g.fillStyle = head;
     g.beginPath(); g.ellipse(cx, cy, R*1.02, R*1.0, 0, 0, 7); g.fill();
 
-    // ---- eye patches (angled teardrops) ----
     eyePatch(cx - R*0.40, cy - R*0.05, -0.5);
     eyePatch(cx + R*0.40, cy - R*0.05,  0.5);
-
-    // ---- eyes (glossy) ----
     eye(cx - R*0.40, cy + R*0.02);
     eye(cx + R*0.40, cy + R*0.02);
 
-    // ---- muzzle shading + nose + mouth ----
     const mz = g.createRadialGradient(cx, cy + R*0.40, 4, cx, cy + R*0.42, R*0.5);
-    mz.addColorStop(0,'rgba(150,144,190,0.30)');
-    mz.addColorStop(1,'rgba(150,144,190,0)');
+    mz.addColorStop(0,'rgba(150,144,190,0.30)'); mz.addColorStop(1,'rgba(150,144,190,0)');
     g.fillStyle = mz;
     g.beginPath(); g.ellipse(cx, cy + R*0.44, R*0.42, R*0.32, 0, 0, 7); g.fill();
-    // nose
     const nose = g.createRadialGradient(cx - R*0.03, cy + R*0.28, 2, cx, cy + R*0.33, R*0.19);
     nose.addColorStop(0,'#3a3550'); nose.addColorStop(0.7,'#171425'); nose.addColorStop(1,'#171425');
     g.fillStyle = nose;
@@ -158,7 +228,6 @@
     g.quadraticCurveTo(cx + R*0.10, cy + R*0.44, cx, cy + R*0.46);
     g.quadraticCurveTo(cx - R*0.10, cy + R*0.44, cx - R*0.15, cy + R*0.26);
     g.closePath(); g.fill();
-    // mouth
     g.strokeStyle = 'rgba(30,26,48,0.85)'; g.lineWidth = R*0.035; g.lineCap='round';
     g.beginPath(); g.moveTo(cx, cy + R*0.46); g.lineTo(cx, cy + R*0.58); g.stroke();
     g.beginPath();
@@ -168,7 +237,8 @@
     g.quadraticCurveTo(cx, cy + R*0.70, cx, cy + R*0.58);
     g.stroke();
 
-    grab();
+    grab(false);
+    setSource('panda');
 
     function ear(x,y,r){
       const grd = g.createRadialGradient(x - r*0.25, y - r*0.25, r*0.1, x, y, r);
@@ -195,7 +265,6 @@
       g.fillStyle = grd; g.fillRect(x-7,0,14,SH);
       g.strokeStyle='rgba(30,45,35,0.5)'; g.lineWidth=2;
       for(let y=40;y<SH;y+=70){ g.beginPath(); g.moveTo(x-7,y); g.lineTo(x+7,y); g.stroke(); }
-      // a couple of leaves
       g.fillStyle='rgba(55,80,58,0.8)';
       for(const [ly,dir] of [[110,1],[250,-1],[380,1]]){
         g.beginPath(); g.ellipse(x+dir*26, ly, 30, 8, dir*0.5, 0, 7); g.fill();
@@ -204,18 +273,10 @@
     }
   }
 
-  function grab(){
-    const d = sctx.getImageData(0,0,SW,SH).data;
-    for(let i=0,p=0;i<lum.length;i++,p+=4){
-      lum[i] = (0.299*d[p]+0.587*d[p+1]+0.114*d[p+2])/255;
-    }
-  }
-
-  // ---------- ASCII ramp (light bg: space = bright, @ = dark) ----------
+  // ---------- ASCII ramp (light paper: space = bright, @ = dark) ----------
   const RAMP = " .:+=oxO0Z#8%@";
   const RLEN = RAMP.length;
 
-  // 8x8 Bayer normalised
   const BAYER = (()=>{ const m=[
     0,48,12,60,3,51,15,63, 32,16,44,28,35,19,47,31,
     8,56,4,52,11,59,7,55, 40,24,36,20,43,27,39,23,
@@ -226,10 +287,11 @@
   let COLS=240, ROWS=150, cell=5, dpr=1;
   function layout(){
     const rect = stage.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
     dpr = Math.min(window.devicePixelRatio||1, 2);
     view.width = Math.round(rect.width*dpr);
     view.height = Math.round(rect.height*dpr);
-    COLS = Math.max(120, Math.min(300, Math.floor(rect.width/4.6)));
+    COLS = Math.max(110, Math.min(300, Math.floor(rect.width/4.6)));
     cell = (rect.width*dpr)/COLS;
     ROWS = Math.floor((rect.height*dpr)/cell);
     vctx.textBaseline='top';
@@ -241,17 +303,18 @@
 
   function sample(sx,sy){
     let x = sx<0?0:sx>SW-1?SW-1:sx, y = sy<0?0:sy>SH-1?SH-1:sy;
-    return lum[(y|0)*SW + (x|0)];
+    return (y|0)*SW + (x|0);
   }
   function hexRGB(h){ const n=parseInt(h.slice(1),16); return [(n>>16)&255,(n>>8)&255,n&255]; }
 
-  let t=0, mx=0, my=0, tx=0, ty=0;
+  let t=0, mx=0, my=0, tx=0, ty=0, motionOn=true;
   function frame(){
-    t += 1/60;
+    if (motionOn) t += 1/60;
     tx += (mx-tx)*0.06; ty += (my-ty)*0.06;
     view.style.transform = `rotateY(${tx*6}deg) rotateX(${-ty*5}deg) translateZ(0)`;
 
-    const [rr,gg,bb] = hexRGB(inks[inkIdx].c);
+    const pal = palettes[palIdx];
+    const [rr,gg,bb] = hexRGB(pal.ink);
     vctx.clearRect(0,0,view.width,view.height);
 
     // slow "boil": shift the Bayer lattice a little each frame -> living halftone
@@ -259,26 +322,35 @@
     const ox = Math.floor(ph) & 7, oy = Math.floor(ph*0.7) & 7;
     const parX = tx*6, parY = ty*6;  // tiny parallax, image stays crisp
 
+    const accents = []; // [col, row, glyph] cells drawn in accent ink
     for(let r=0;r<ROWS;r++){
       const v = r/ROWS;
-      vctx.fillStyle = `rgba(${rr},${gg},${bb},${0.62+v*0.34})`;
+      vctx.fillStyle = `rgba(${rr},${gg},${bb},${0.66+v*0.30})`;
       let line='';
       for(let c=0;c<COLS;c++){
         const u = c/COLS;
-        let b = sample(u*SW + parX, v*SH + parY);
-        // gentle breathing shimmer sweeping across
+        const idx = sample(u*SW + parX, v*SH + parY);
+        let b = lum[idx];
         b += 0.03*Math.sin(u*5 + v*3 - t*1.4);
         b = b<0?0:b>1?1:b;
         const thr = BAYER[((r+oy)&7)*8 + ((c+ox)&7)];
         let bd = b + (thr-0.5)*0.14;
         bd = bd<0?0:bd>1?1:bd;
-        line += RAMP[Math.round((1-bd)*(RLEN-1))];
+        const ch = RAMP[Math.round((1-bd)*(RLEN-1))];
+        if (red[idx] && ch !== ' '){ accents.push(c, r, ch); line += ' '; }
+        else line += ch;
       }
       vctx.fillText(line, 0, r*cell);
+    }
+    // second pass: red pixels (sun, seals, tongue) in accent ink
+    vctx.fillStyle = pal.accent;
+    for(let i=0;i<accents.length;i+=3){
+      vctx.fillText(accents[i+2], accents[i]*cell, accents[i+1]*cell);
     }
     requestAnimationFrame(frame);
   }
 
+  // ---------- interaction ----------
   window.addEventListener('pointermove', e=>{
     const rect = stage.getBoundingClientRect();
     mx = ((e.clientX-rect.left)/rect.width-0.5)*2;
@@ -286,15 +358,41 @@
   });
   window.addEventListener('pointerleave', ()=>{ mx=0; my=0; });
 
-  function nextInk(){
-    inkIdx=(inkIdx+1)%inks.length;
-    document.querySelectorAll('.headline h1 span').forEach(s=>s.style.color=inks[inkIdx].c);
+  document.getElementById('regen').addEventListener('click', ()=>setPalette(palIdx+1));
+  stage.addEventListener('click', e=>{ if(e.target===stage) setPalette(palIdx+1); });
+
+  document.getElementById('motion').addEventListener('click', ()=>{
+    motionOn = !motionOn;
+    document.getElementById('dot').classList.toggle('off', !motionOn);
+  });
+
+  // swap image: file picker + drag & drop
+  function loadFile(file){
+    if(!file || !file.type.startsWith('image/')) return;
+    const rd = new FileReader();
+    rd.onload = ()=>{
+      const img = new Image();
+      img.onload = ()=>useImage(img,'custom');
+      img.src = rd.result;
+    };
+    rd.readAsDataURL(file);
   }
-  document.getElementById('regen').addEventListener('click', nextInk);
-  stage.addEventListener('click', e=>{ if(e.target===stage) nextInk(); });
+  document.getElementById('file').addEventListener('change', e=>loadFile(e.target.files[0]));
+  window.addEventListener('dragover', e=>{ e.preventDefault(); stage.classList.add('drop'); });
+  window.addEventListener('dragleave', ()=>stage.classList.remove('drop'));
+  window.addEventListener('drop', e=>{
+    e.preventDefault(); stage.classList.remove('drop');
+    loadFile(e.dataTransfer.files[0]);
+  });
+
   window.addEventListener('resize', layout);
 
-  layout(); drawScene(); requestAnimationFrame(frame);
+  // ---------- boot: dragon.jpg if the repo has it, panda otherwise ----------
+  setPalette(0); layout(); drawPanda();  // instant first paint
+  const dragon = new Image();
+  dragon.onload = ()=>useImage(dragon,'dragon');
+  dragon.src = 'dragon.jpg';
+  requestAnimationFrame(frame);
 })();
 </script>
 </body>
